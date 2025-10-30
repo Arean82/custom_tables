@@ -60,10 +60,7 @@ class CustomEntitiesController < ApplicationController
   end
 
   def destroy
-    unless User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) }
-      Rails.logger.warn "❌ DELETE BLOCKED in destroy: #{User.current.login}"
-      return render_403
-    end
+    Rails.logger.info "✅ ALLOWED: #{User.current.login} deleting CustomEntities: #{@custom_entities.map(&:id).join(', ')}"
 
     custom_table = @custom_entities.first.custom_table
     @custom_entities.destroy_all
@@ -77,13 +74,17 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
+
   def restrict_destroy_to_admin_and_manager
     allowed_roles = ['Administrator', 'Manager']
-    unless User.current.admin? || User.current.roles.any? { |r| allowed_roles.include?(r.name) }
-      Rails.logger.warn "🚫 Delete blocked for #{User.current.login}"
+    user_roles = User.current.roles.map(&:name)
+    
+    unless User.current.admin? || user_roles.any? { |r| allowed_roles.include?(r) }
+      Rails.logger.warn "🚫 DELETE BLOCKED: #{User.current.login}, roles: #{user_roles.join(', ')}"
       render_403
     end
   end
+
 
 
   
