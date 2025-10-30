@@ -44,7 +44,9 @@
               <td class="buttons">
                     <%= link_to sprite_icon('bullet-go', l(:label_open_issues)), custom_entity_path(entity), title: l(:label_open_issues), class: Redmine::VERSION::MAJOR > 5 ? 'icon-only' : 'icon-only icon-arrow-right' %>
                     <%= link_to sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
-                    <%= link_to sprite_icon('del', l(:button_delete)), custom_entity_path(entity, custom_table_id: @custom_table, project_id: params[:project_id], back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+                    <% if User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) } %>
+                      <%= link_to sprite_icon('del', l(:button_delete)), custom_entity_path(entity, custom_table_id: @custom_table, project_id: params[:project_id], back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+                    <% end %>
               </td>
             </tr>
         <% end %>

@@ -21,7 +21,10 @@
       <td class="buttons">
         <%= reorder_handle(custom_field, url: custom_field_path(custom_field), param: 'custom_field') %>
         <%= link_to l(:button_edit), edit_table_field_path(id: custom_field, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
-        <%= delete_link table_field_path(custom_field, custom_table_id: @custom_table.id, back_url: back_url), class: 'icon-only icon-del' %>
+        
+        <% if User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) } %>       
+          <%= delete_link table_field_path(custom_field, custom_table_id: @custom_table.id, back_url: back_url), class: 'icon-only icon-del' %>
+        <% end %>
       </td>
     </tr>
   <% end; reset_cycle %>

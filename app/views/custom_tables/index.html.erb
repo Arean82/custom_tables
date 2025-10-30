@@ -30,7 +30,9 @@
         <%= raw @query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\"><span> #{render_custom_table_content(column, table)}</span></td>"}.join %>
         <td class="buttons">
           <%= link_to sprite_icon('settings', l(:button_edit)), edit_custom_table_path(table), title: l(:label_settings), class: 'icon-only icon-settings' %>
-          <%= link_to sprite_icon('del', l(:button_delete)), custom_table_path(table, back_url: custom_tables_path), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+          <% if User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) } %>
+            <%= link_to sprite_icon('del', l(:button_delete)), custom_table_path(table, back_url: custom_tables_path), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+          <% end %>        
         </td>
       </tr>
     <% end -%>

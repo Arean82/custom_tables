@@ -26,7 +26,9 @@
             <% end %>
             <% if User.current.allowed_to?(:manage_custom_tables, nil, global: true) %>
               <%= link_to sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
-              <%= link_to sprite_icon('del', l(:button_delete)), custom_entity_path(entity, custom_table_id: custom_table, back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+              <% if User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) } %>
+                <%= link_to sprite_icon('del', l(:button_delete)), custom_entity_path(entity, custom_table_id: custom_table, back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+              <% end %>
             <% end %>
           </td>
         </tr>
