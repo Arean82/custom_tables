@@ -84,7 +84,7 @@ class CustomEntitiesController < ApplicationController
       render_403
     end
   end
-  
+
 
   
   def create
@@ -141,18 +141,18 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
-  def destroy
-    custom_table = @custom_entities.first.custom_table
-    @custom_entities.destroy_all
-
-    respond_to do |format|
-      format.html {
-        flash[:notice] = l(:notice_successful_delete)
-        redirect_back_or_default custom_table_path(custom_table)
-      }
-      format.api { render_api_ok }
-    end
-  end
+  #def destroy
+  #  custom_table = @custom_entities.first.custom_table
+  #  @custom_entities.destroy_all
+#
+  #  respond_to do |format|
+  #    format.html {
+  #      flash[:notice] = l(:notice_successful_delete)
+  #      redirect_back_or_default custom_table_path(custom_table)
+  #    }
+  #    format.api { render_api_ok }
+  #  end
+  #end
 
   def add_belongs_to
     @custom_field = CustomEntityCustomField.find(params[:custom_field_id])
