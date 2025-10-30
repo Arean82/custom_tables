@@ -3,25 +3,31 @@ class CustomEntity < CustomTables::ActiveRecordClass.base
   include CustomTables::ActsAsJournalize
 
   belongs_to :custom_table
-  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   belongs_to :issue
-  has_one :project, through: :issue
-  has_many :custom_fields, through: :custom_table
+  has_one    :project, through: :issue
+  has_many   :custom_fields, through: :custom_table
 
-  belongs_to :author, class_name: 'User', optional: true
-  belongs_to :updated_by, class_name: 'User', optional: true
+  # ✅ Audit tracking relationships
+  belongs_to :author,     class_name: 'User', foreign_key: 'author_id', optional: true
+  belongs_to :updated_by, class_name: 'User', foreign_key: 'updated_by_id', optional: true
 
-
-  safe_attributes 'custom_table_id', 'author_id', 'custom_field_values', 'custom_fields', 'parent_entity_ids',
-                  'sub_entity_ids', 'issue_id', 'external_values'
+  safe_attributes(
+    'custom_table_id', 'author_id', 'updated_by_id',
+    'custom_field_values', 'custom_fields',
+    'parent_entity_ids', 'sub_entity_ids',
+    'issue_id', 'external_values'
+  )
 
   acts_as_customizable
+  acts_as_watchable
 
   delegate :main_custom_field, to: :custom_table
 
-  acts_as_watchable
-
   self.journal_options = {}
+
+  # ✅ Automatically set audit fields
+  before_create :set_author
+  before_save   :set_updated_by
 
   def name
     if new_record?
@@ -34,7 +40,7 @@ class CustomEntity < CustomTables::ActiveRecordClass.base
 
   def editable?(user = User.current)
     return true if user.admin? || custom_table.is_for_all
-    user.allowed_to?(:edit_issues, issue.project)
+    user.allowed_to?(:edit_issues, issue.try(:project))
   end
 
   def visible?(user = User.current)
@@ -46,51 +52,31 @@ class CustomEntity < CustomTables::ActiveRecordClass.base
     editable?
   end
 
-  def leaf?
-    false
-  end
+  def leaf?; false; end
+  def is_descendant_of?(p); false; end
 
-  def is_descendant_of?(p)
-    false
-  end
-
-  def each_notification(users, &block)
-  end
-
-  def notified_users
-    []
-  end
-
-  def notified_mentions
-    []
-  end
-
-  def attachments
-    []
-  end
+  def each_notification(users, &block); end
+  def notified_users; []; end
+  def notified_mentions; []; end
+  def attachments; []; end
 
   def available_custom_fields
     custom_fields.sorted.to_a
   end
 
-  def created_on
-    created_at
-  end
-
-  def updated_on
-    updated_at
-  end
+  def created_on; created_at; end
+  def updated_on; updated_at; end
 
   def value_by_external_name(external_name)
-    custom_field_values.detect {|v| v.custom_field.external_name == external_name}.try(:value)
+    custom_field_values.detect { |v| v.custom_field.external_name == external_name }.try(:value)
   end
 
   def external_values=(values)
-    custom_field_values.each do |custom_field_value|
-      key = custom_field_value.custom_field.external_name
+    custom_field_values.each do |cf_value|
+      key = cf_value.custom_field.external_name
       next unless key.present?
       if values.has_key?(key)
-        custom_field_value.value = values[key]
+        cf_value.value = values[key]
       end
     end
     @custom_field_values_changed = true
@@ -99,9 +85,22 @@ class CustomEntity < CustomTables::ActiveRecordClass.base
   def to_h
     values = {}
     custom_field_values.each do |value|
-      values[value.custom_field.external_name] = value.value if value.custom_field.external_name.present?
+      if value.custom_field.external_name.present?
+        values[value.custom_field.external_name] = value.value
+      end
     end
-    values["id"] = id
+    values['id'] = id
     values
+  end
+
+  private
+
+  # 🧠 Auto-assign author/updated_by fields
+  def set_author
+    self.author_id ||= User.current.id if User.current
+  end
+
+  def set_updated_by
+    self.updated_by_id = User.current.id if User.current
   end
 end
