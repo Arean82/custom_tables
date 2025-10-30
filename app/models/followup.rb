@@ -1,5 +1,8 @@
 class Followup < ActiveRecord::Base
+  belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id'
+
   before_create :set_creator
+  validates :call_customer, presence: true
 
   private
 
