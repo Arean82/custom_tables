@@ -1,5 +1,5 @@
 
-class CreateFollowupsTable < ActiveRecord::Migration
+class CreateFollowupsTable < ActiveRecord::Migration[4.2]
   def change
     create_table :followups do |t|
       t.string  :call_customer
