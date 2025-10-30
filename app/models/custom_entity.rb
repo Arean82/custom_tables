@@ -8,6 +8,10 @@ class CustomEntity < CustomTables::ActiveRecordClass.base
   has_one :project, through: :issue
   has_many :custom_fields, through: :custom_table
 
+  belongs_to :author, class_name: 'User', optional: true
+  belongs_to :updated_by, class_name: 'User', optional: true
+
+
   safe_attributes 'custom_table_id', 'author_id', 'custom_field_values', 'custom_fields', 'parent_entity_ids',
                   'sub_entity_ids', 'issue_id', 'external_values'
 

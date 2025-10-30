@@ -83,6 +83,11 @@ class CustomEntitiesController < ApplicationController
     @custom_entity = CustomEntity.new(author: User.current, custom_table_id: params[:custom_entity][:custom_table_id])
     @custom_entity.safe_attributes = params[:custom_entity]
 
+    
+    @custom_entity.updated_by = User.current  # track updater
+    @custom_entity.updated_at = Time.current  # ensure timestamp if not automatically handled
+
+
     if @custom_entity.save
       flash[:notice] = l(:notice_successful_create)
       respond_to do |format|
@@ -110,6 +115,7 @@ class CustomEntitiesController < ApplicationController
   def update
     @custom_entity.init_journal(User.current)
     @custom_entity.safe_attributes = params[:custom_entity]
+    @custom_entity.updated_by = User.current  # track who updated
 
     if @custom_entity.save
       flash[:notice] = l(:notice_successful_update)
