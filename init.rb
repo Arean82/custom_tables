@@ -31,3 +31,7 @@ Rails.configuration.to_prepare do
   require_dependency 'custom_entities_controller'
   CustomEntitiesController.include(CustomTables::CustomEntitiesControllerPatch)
 end
+
+
+#require File.expand_path('../lib/custom_tables/patches/followups_loader_patch', __FILE__)
+require_dependency File.expand_path('lib/custom_tables/patches/followups_loader_patch', __dir__)
