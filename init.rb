@@ -24,3 +24,10 @@ Redmine::MenuManager.map :admin_menu do |menu|
 end
 
 Dir[File.join(File.dirname(__FILE__), '/lib/custom_tables/**/*.rb')].each { |file| require_dependency file }
+
+require File.expand_path('../lib/custom_tables/custom_entities_controller_patch', __FILE__)
+
+Rails.configuration.to_prepare do
+  require_dependency 'custom_entities_controller'
+  CustomEntitiesController.include(CustomTables::CustomEntitiesControllerPatch)
+end
