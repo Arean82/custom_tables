@@ -77,6 +77,14 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
+  def restrict_destroy_to_admin_and_manager
+    allowed_roles = ['Administrator', 'Manager']
+    unless User.current.admin? || User.current.roles.any? { |r| allowed_roles.include?(r.name) }
+      Rails.logger.warn "🚫 Delete blocked for #{User.current.login}"
+      render_403
+    end
+  end
+  
 
   
   def create
