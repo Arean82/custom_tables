@@ -16,8 +16,7 @@ class CustomEntitiesController < ApplicationController
 
   accept_api_auth :show, :create, :update, :destroy
 
-  before_action :restrict_destroy_to_admin_and_manager, only: [:destroy]
-
+  before_action :restrict_destroy_to_admin_and_manager, only: [:destroy, :context_menu, :bulk_update]
 
   before_action :authorize_global
   before_action :find_custom_entity, only: [:show, :edit, :update, :add_belongs_to, :new_note]
@@ -60,12 +59,25 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
-  def restrict_destroy_to_admin_and_manager
-    allowed_roles = ['Administrator', 'Manager']
-    unless User.current.admin? || User.current.roles.any? { |r| allowed_roles.include?(r.name) }
-      render_403
+  def destroy
+    unless User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) }
+      Rails.logger.warn "❌ DELETE BLOCKED in destroy: #{User.current.login}"
+      return render_403
+    end
+
+    custom_table = @custom_entities.first.custom_table
+    @custom_entities.destroy_all
+
+    respond_to do |format|
+      format.html {
+        flash[:notice] = l(:notice_successful_delete)
+        redirect_back_or_default custom_table_path(custom_table)
+      }
+      format.api { render_api_ok }
     end
   end
+
+
   
   def create
     @custom_entity = CustomEntity.new(author: User.current, custom_table_id: params[:custom_entity][:custom_table_id])
@@ -144,7 +156,7 @@ class CustomEntitiesController < ApplicationController
     @custom_entity_ids = @custom_entities.map(&:id).sort
 
     can_edit = @custom_entities.detect{|c| !c.editable?}.nil?
-    can_delete = @custom_entities.detect{|c| !c.deletable?}.nil?
+    can_delete = User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) }
     @can = {:edit => can_edit, :delete => can_delete}
     @back = back_url
 
