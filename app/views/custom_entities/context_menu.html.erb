@@ -18,7 +18,17 @@
     </ul>
   </li>
   
+  <!-- 
   <% if User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) } %>
     <li><%= context_menu_link sprite_icon('del', l(:button_delete)), custom_entities_path(ids: @custom_entity_ids, back_url: @back), method: :delete, data: {confirm: l(:text_are_you_sure)}, class: 'icon icon-del', disabled: !@can[:delete] %></li>
   <% end %>
+  -->
+  <% if @can[:delete] %>
+    <li><%= context_menu_link sprite_icon('del', l(:button_delete)),
+          custom_entities_path(ids: @custom_entity_ids, back_url: @back),
+          method: :delete,
+          data: {confirm: l(:text_are_you_sure)},
+          class: 'icon icon-del' %></li>
+  <% end %>
+  
 </ul>
