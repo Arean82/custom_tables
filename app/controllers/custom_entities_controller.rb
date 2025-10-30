@@ -16,7 +16,8 @@ class CustomEntitiesController < ApplicationController
 
   accept_api_auth :show, :create, :update, :destroy
 
-  before_action :prevent_unauthorized_delete, only: [:destroy]
+  before_action :restrict_destroy_to_admin_and_manager, only: [:destroy]
+
 
   before_action :authorize_global
   before_action :find_custom_entity, only: [:show, :edit, :update, :add_belongs_to, :new_note]
@@ -59,14 +60,13 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
-  def prevent_unauthorized_delete
+  def restrict_destroy_to_admin_and_manager
     allowed_roles = ['Administrator', 'Manager']
     unless User.current.admin? || User.current.roles.any? { |r| allowed_roles.include?(r.name) }
       render_403
     end
   end
-
-
+  
   def create
     @custom_entity = CustomEntity.new(author: User.current, custom_table_id: params[:custom_entity][:custom_table_id])
     @custom_entity.safe_attributes = params[:custom_entity]
