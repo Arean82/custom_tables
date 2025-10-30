@@ -16,6 +16,8 @@ class CustomEntitiesController < ApplicationController
 
   accept_api_auth :show, :create, :update, :destroy
 
+  before_action :prevent_unauthorized_delete, only: [:destroy]
+
   before_action :authorize_global
   before_action :find_custom_entity, only: [:show, :edit, :update, :add_belongs_to, :new_note]
   before_action :find_custom_entities, only: [:context_menu, :bulk_edit, :bulk_update, :destroy, :context_export]
@@ -56,6 +58,14 @@ class CustomEntitiesController < ApplicationController
       format.html
     end
   end
+
+  def prevent_unauthorized_delete
+    allowed_roles = ['Administrator', 'Manager']
+    unless User.current.admin? || User.current.roles.any? { |r| allowed_roles.include?(r.name) }
+      render_403
+    end
+  end
+
 
   def create
     @custom_entity = CustomEntity.new(author: User.current, custom_table_id: params[:custom_entity][:custom_table_id])
