@@ -1,3 +1,5 @@
+# custom_tables_controller.rb
+
 class CustomTablesController < ApplicationController
   layout 'admin'
   self.main_menu = false
@@ -13,11 +15,17 @@ class CustomTablesController < ApplicationController
   helper :settings
   helper :custom_tables_pdf
 
+  # Add permission helper
+  helper :custom_tables_permission
+
   before_action :find_custom_table, only: [:edit, :update, :show, :destroy, :setting_tabs]
   before_action :authorize_global
   before_action :find_custom_tables, only: [:context_menu]
   before_action :setting_tabs, only: :edit
   before_action :export_custom_entities, only: :show
+
+  # ADD: Check permissions for table operations
+  before_action :check_manage_permission, only: [:new, :create, :edit, :update, :destroy, :context_menu]
 
   accept_api_auth :show, :index, :create, :update, :destroy
 
@@ -140,14 +148,24 @@ class CustomTablesController < ApplicationController
     end
     @custom_tables_ids = @custom_tables.map(&:id).sort
 
-    can_edit = @custom_tables.detect{|c| !c.editable?}.nil?
-    can_delete = @custom_tables.detect{|c| !c.deletable?}.nil?
-    @can = {:edit => can_edit, :delete => can_delete}
+    # Use permission helper
+    has_full_access = custom_tables_user_has_full_access?
+    @can = { edit: has_full_access, delete: has_full_access }
     @back = back_url
 
     @safe_attributes = @custom_tables.map(&:safe_attribute_names).reduce(:&)
 
     render layout: false
+  end
+
+  private
+
+  def check_manage_permission
+    unless custom_tables_user_has_full_access?
+      Rails.logger.warn "🚫 MANAGE PERMISSION REQUIRED: #{User.current.login} attempted #{action_name}"
+      render_403
+      return false
+    end
   end
 
   def setting_tabs

@@ -1,3 +1,5 @@
+#custom_entities_controller.rb
+
 class CustomEntitiesController < ApplicationController
   layout 'admin'
   self.main_menu = false
@@ -16,7 +18,7 @@ class CustomEntitiesController < ApplicationController
 
   accept_api_auth :show, :create, :update, :destroy
 
-  before_action :restrict_destroy_to_admin_and_manager, only: [:destroy, :context_menu, :bulk_update]
+  before_action :check_destroy_permission, only: [:destroy, :context_menu, :bulk_update]
 
   before_action :authorize_global
   before_action :find_custom_entity, only: [:show, :edit, :update, :add_belongs_to, :new_note]
@@ -59,6 +61,7 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
+
   def destroy
     Rails.logger.info "✅ ALLOWED: #{User.current.login} deleting CustomEntities: #{@custom_entities.map(&:id).join(', ')}"
 
@@ -75,17 +78,30 @@ class CustomEntitiesController < ApplicationController
   end
 
 
-  def restrict_destroy_to_admin_and_manager
-    allowed_roles = ['Administrator', 'Manager']
-    user_roles = User.current.roles.map(&:name)
-    
-    unless User.current.admin? || user_roles.any? { |r| allowed_roles.include?(r) }
-      Rails.logger.warn "🚫 DELETE BLOCKED: #{User.current.login}, roles: #{user_roles.join(', ')}"
+
+  def check_destroy_permission
+    unless custom_tables_user_has_full_access?
+      Rails.logger.warn "🚫 DESTROY BLOCKED: #{User.current.login}, needs full access"
       render_403
     end
   end
 
+  def context_menu
+    if (@custom_entities.size == 1)
+      @custom_entity = @custom_entities.first
+    end
+    @custom_entity_ids = @custom_entities.map(&:id).sort
 
+    can_edit = @custom_entities.detect{|c| !c.editable?}.nil?
+    # Use the new permission helper
+    can_delete = custom_tables_user_has_full_access?
+    @can = {:edit => can_edit, :delete => can_delete}
+    @back = back_url
+
+    @safe_attributes = @custom_entities.map(&:safe_attribute_names).reduce(:&)
+
+    render :layout => false
+  end
 
   
   def create

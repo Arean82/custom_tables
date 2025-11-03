@@ -1,3 +1,5 @@
+#table_fields_controller.rb
+
 class TableFieldsController < CustomFieldsController
   layout 'admin'
   self.main_menu = false
@@ -6,9 +8,13 @@ class TableFieldsController < CustomFieldsController
   helper :custom_tables
   helper :queries
   include QueriesHelper
+  # Add permission helper
+  helper :custom_tables_permission
 
   before_action :authorize_global
   before_action :build_new_custom_field, only: [:new, :create]
+  # ADD: Check permissions
+  before_action :check_manage_permission, except: [:show, :index]
 
   def new
     @custom_table = CustomTable.find(params[:custom_table_id])
@@ -79,6 +85,16 @@ class TableFieldsController < CustomFieldsController
   def build_new_custom_field
     @custom_field = CustomEntityCustomField.new
     @custom_field.safe_attributes = params[:custom_field]
+  end
+
+  private
+
+  def check_manage_permission
+    unless custom_tables_user_has_full_access?
+      Rails.logger.warn "🚫 MANAGE PERMISSION REQUIRED: #{User.current.login} attempted #{action_name}"
+      render_403
+      return false
+    end
   end
 
 end

@@ -24,22 +24,48 @@
     <%= render_half_width_custom_fields_rows(@custom_entity) %>
   </div>
 
+  <!--# <% @queries_scope.each do |query| %>
+  #        <hr />
+  #        <div class="contextual">
+  #          <%= link_to l(:label_new), new_custom_entity_path(
+  #              custom_table_id: query[:custom_table_id],
+  #              back_url: custom_entity_path(@custom_entity),
+  #              custom_entity: {custom_field_values: query[:selected_custom_values]}), remote: true, class: 'icon icon-add' %>
+  #          <%= call_hook(:view_custom_table_sub_table_action_menu) %>
+  #        </div>
+  #        <h2><%= query[:name] %></h2>
+  #    <% if query[:custom_entities].present? %>
+  #        <div>
+  #          <%= render partial: 'custom_tables/query_form', locals: {query: query[:query], entities: query[:custom_entities], back_url: custom_entity_path(@custom_entity)} %>
+  #        </div>
+  #    <% end %>
+  #<% end %> #-->
+
   <% @queries_scope.each do |query| %>
-          <hr />
-          <div class="contextual">
-            <%= link_to l(:label_new), new_custom_entity_path(
-                custom_table_id: query[:custom_table_id],
-                back_url: custom_entity_path(@custom_entity),
-                custom_entity: {custom_field_values: query[:selected_custom_values]}), remote: true, class: 'icon icon-add' %>
-            <%= call_hook(:view_custom_table_sub_table_action_menu) %>
-          </div>
-          <h2><%= query[:name] %></h2>
-      <% if query[:custom_entities].present? %>
-          <div>
-            <%= render partial: 'custom_tables/query_form', locals: {query: query[:query], entities: query[:custom_entities], back_url: custom_entity_path(@custom_entity)} %>
-          </div>
+    <hr/>
+    <div class="contextual">
+      <%= call_hook(:view_custom_table_table_field_action_menu) %>
+      <%= link_to sprite_icon('edit', l(:button_edit)),
+                  edit_custom_entity_path(@custom_entity, back_url: custom_entity_path(@custom_entity)),
+                  remote: true,
+                  class: 'icon icon-edit' %>
+  
+      <%= link_to sprite_icon('issue-edit', l(:button_new_comment)),
+                  new_note_custom_entity_path(@custom_entity),
+                  remote: true,
+                  class: 'icon icon-issue-edit' %>
+      <% if custom_tables_user_has_full_access? %>
+        <%= link_to sprite_icon('del', l(:button_delete)),
+                    custom_entity_path(@custom_entity, custom_table_id: @custom_entity.custom_table),
+                    data: { confirm: l(:text_are_you_sure) },
+                    method: :delete,
+                    title: l(:button_delete),
+                    class: 'icon icon-del' %>
       <% end %>
+    </div>
   <% end %>
+
+
 
   </div>
   <% if @journals.present? %>

@@ -1,0 +1,21 @@
+# app/views/custom_tables/_settings.html.erb
+<div class="box tabular">
+  <p>
+    <%= content_tag :label, l(:label_enable_custom_permissions) %>
+    <%= check_box_tag 'settings[enable_custom_permissions]', 1, @settings['enable_custom_permissions'] %>
+    <br />
+    <em class="info"><%= l(:text_enable_custom_permissions_help) %></em>
+  </p>
+
+  <p>
+    <%= content_tag :label, l(:label_allowed_groups) %>
+    <%= select_tag 'settings[allowed_groups][]',
+                   options_from_collection_for_select(Group.sorted, :id, :name, @settings['allowed_groups']),
+                   multiple: true,
+                   size: 10,
+                   style: 'width: 300px;',
+                   class: 'custom-tables-select' %>
+    <br />
+    <em class="info"><%= l(:text_allowed_groups_help) %></em>
+  </p>
+</div>
