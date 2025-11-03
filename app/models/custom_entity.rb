@@ -64,7 +64,18 @@ class CustomEntity < CustomTables::ActiveRecordClass.base
     custom_fields.sorted.to_a
   end
 
-  def created_on; created_at; end
+  #def created_on
+  ## created_at; 
+  #  respond_to?(:created_at) ? created_at : updated_at
+  #end
+  def created_on
+    # Use updated_at as fallback if created_at doesn't exist
+    if respond_to?(:created_at) && created_at.present?
+      created_at
+    else
+      updated_at
+    end
+  end
   def updated_on; updated_at; end
 
   def value_by_external_name(external_name)
