@@ -74,4 +74,79 @@
 <% end %>
 
 
+<%= context_menu %><% unless @custom_entity %>
+    <%= form_tag(custom_table_path(@custom_table), method: :get, id: 'query_form') do %>
+        <%= hidden_field_tag 'custom_table_id', @custom_table.id %>
+        <%= render partial: 'query_headers' %>
+    <% end %>
+<% end %>
+<%= form_tag({}, data: {cm_url: context_menu_custom_entities_path}) do -%>
+    <%= hidden_field_tag 'back_url', url_for(params.permit!) %>
+    <div class="autoscroll">
+      <table class="list time-entries">
+        <thead>
+        <tr>
+          <th class="checkbox hide-when-print">
+            <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
+                              :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+          </th>
+          <!-- ADD S.NO COLUMN HEADER -->
+          <% if custom_tables_serial_numbers_enabled? %>
+              <th class="sno" style="width: 60px; text-align: center; font-weight: bold; background-color: #f0f0f0; border-right: 1px solid #e0e0e0;">S.No</th>
+          <% end %>
+
+          <% query.inline_columns.each do |column| %>
+              <%= column_header(query, column) %>
+          <% end %>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <% unless @custom_entity %>
+            <%= render_query_totals(@query) %>
+        <% end %>
+        <% grouped_query_results(entities, query) do |entity, group_name, group_count, group_totals| -%>
+            <% if group_name %>
+                <% reset_cycle %>
+                <tr class="group open">
+                  <td colspan="<%= query.inline_columns.size + (custom_tables_serial_numbers_enabled? ? 2 : 1) %>">
+                    <span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>
+                    <span class="name"><%= group_name %></span> <span class="count"><%= group_count %></span> <span class="totals"><%= group_totals %></span>
+                    <%= link_to_function("#{l(:button_collapse_all)}/#{l(:button_expand_all)}",
+                                         "toggleAllRowGroups(this)", :class => 'toggle-all') %>
+                  </td>
+                </tr>
+            <% end %>
+
+            <tr class="cusotm-entity-<%= cycle("odd", "even") %> hascontextmenu">
+              <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entity.id, false, id: nil) %></td>
+              
+              <!-- ADD S.NO CELL - FIXED SYNTAX -->
+              <% if custom_tables_serial_numbers_enabled? %>
+                <td class="sno" style="width: 60px; text-align: center; font-weight: bold; background-color: #f9f9f9; border-right: 1px solid #e0e0e0;">
+                  <%= @entity_count ? (@entity_pages.offset + (entity_counter || 0) + 1) : (entity_counter || 0) + 1 %>
+                </td>
+              <% end %>
+              
+              <!-- REMOVED DUPLICATE COLUMNS - KEEP ONLY ONE SET -->
+              <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, entity)}</td>"}.join %>
+
+              <td class="buttons">
+                    <%= link_to sprite_icon('bullet-go', l(:label_open_issues)), custom_entity_path(entity), title: l(:label_open_issues), class: Redmine::VERSION::MAJOR > 5 ? 'icon-only' : 'icon-only icon-arrow-right' %>
+                    <%= link_to sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
+                    <% if custom_tables_user_has_full_access? %>
+                      <%= link_to sprite_icon('del', l(:button_delete)), custom_entity_path(entity, custom_table_id: @custom_table, project_id: params[:project_id], back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
+                    <% end %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+<% end %>
+<% if @custom_entities %>
+    <span class="pagination"><%= pagination_links_full @entity_pages, @entity_count %></span>
+<% end %>
+
 <%= context_menu %>
