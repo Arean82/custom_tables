@@ -93,7 +93,8 @@ module CustomTablesPdfHelper
     pdf.SetFontStyle('B',11)
     pdf.RDMMultiCell(190 - i, 5, "#{custom_entity.custom_table.name} - #{custom_entity.name}")
     pdf.SetFontStyle('',8)
-    pdf.RDMMultiCell(190, 5, "#{format_time(custom_entity.created_at)} - #{custom_entity.author}")
+    #pdf.RDMMultiCell(190, 5, "#{format_time(custom_entity.created_at)} - #{custom_entity.author}")
+    pdf.RDMMultiCell(190, 5, "#{format_time(custom_entity.created_on)} - #{custom_entity.author}")
     pdf.ln
 
     left = []
