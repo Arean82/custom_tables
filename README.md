@@ -54,10 +54,11 @@ $ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 Usage
 ----------------------
 ### Basic Setup
-1) Visit **Administration->Custom tables** to open table constructor. 
+1) Visit **Administration → Custom tables** to open table constructor. 
 2) Press button **New table**. Fill the name field, select projects you want to enable table on and submit the form.
 3) Add custom fields to your new table.
-4) Give access to the users **Administration -> Roles and permissions -> Project -> Manage custom tables**
+4) Give access to the users **Administration → Roles and permissions → Project → Manage custom tables**
+5) **🆕 Configure permissions** by going to **Administration → Plugins → Custom Tables plugin → Configure** to set up which user groups can edit and delete records
 
 ### 🆕 Enhanced Permission Configuration
 The plugin includes a **flexible and configurable permission system** that allows precise control over who can edit and delete custom table records:
