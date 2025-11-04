@@ -64,6 +64,12 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
+  def custom_tables_serial_numbers_enabled?
+    settings = Setting.plugin_custom_tables || {}
+    settings['enable_serial_numbers'] || false
+  end
+  helper_method :custom_tables_serial_numbers_enabled?
+
 
   def destroy
     Rails.logger.info "✅ ALLOWED: #{User.current.login} deleting CustomEntities: #{@custom_entities.map(&:id).join(', ')}"

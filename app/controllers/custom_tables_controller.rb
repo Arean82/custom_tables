@@ -211,4 +211,34 @@ class CustomTablesController < ApplicationController
     @custom_entities = CustomEntity.where(id: params[:ids]) if params[:ids]
   end
 
+
+  # ADD SERIAL NUMBER HELPER METHOD TO CONTROLLER
+  def custom_tables_serial_numbers_enabled?
+    settings = Setting.plugin_custom_tables || {}
+    settings['enable_serial_numbers'] || false
+  end
+  helper_method :custom_tables_serial_numbers_enabled?  # Make it available in views
+
+  def setting_tabs
+    @setting_tabs = [
+      {name: 'general', partial: 'custom_tables/edit', label: :label_general},
+      {name: 'custom_fields', partial: 'custom_tables/settings/custom_fields', label: :label_custom_field_plural}
+    ]
+    call_hook(:controller_setting_tabs_after, { setting_tabs: @setting_tabs, custom_table: @custom_table })
+  end
+
+  def find_custom_table
+    @custom_table = CustomTable.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def find_custom_tables
+    @custom_tables = CustomTable.where(id: (params[:id] || params[:ids]))
+  end
+
+  def export_custom_entities
+    @custom_entities = CustomEntity.where(id: params[:ids]) if params[:ids]
+  end
+
 end
