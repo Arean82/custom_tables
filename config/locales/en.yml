@@ -36,3 +36,10 @@ en:
   label_allowed_groups: "Groups with Full Access"
   text_enable_custom_permissions_help: "When enabled, only selected groups will have full permissions (edit, delete). When disabled, only Administrators and Managers have full access."
   text_allowed_groups_help: "Select user groups that should have full permissions (edit, delete tables and entities). All other users will only be able to view and add records."
+  text_allowed_groups_help: "Select user groups that should have full permissions (edit, delete tables and entities). All other users will only be able to view and add records."
+
+  # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
+  label_enable_serial_numbers: "Enable Serial Numbers in Tables"
+  text_enable_serial_numbers_help: "When enabled, tables will display a serial number (S.No) column showing the row number for each record"
+ 
+

@@ -31,3 +31,16 @@ es:
   text_missing_permission_manage_custom_tables: ¡Sin permiso para administrar tablas personalizadas!
   field_name: Nombre
   field_created_on: Creado el
+
+  # NEW STRINGS:
+  label_custom_tables_settings: "Configuración de tablas personalizadas"
+  label_enable_custom_permissions: "Habilitar permisos personalizados de grupo"
+  label_allowed_groups: "Grupos con acceso completo"
+  text_enable_custom_permissions_help: "Cuando está habilitado, solo los grupos seleccionados tendrán permisos completos (editar, eliminar). Cuando está deshabilitado, solo los administradores y gerentes tendrán acceso completo."
+  text_allowed_groups_help: "Seleccione los grupos de usuarios que deben tener acceso completo (editar, eliminar tablas y registros). Todos los demás usuarios solo podrán ver y añadir registros."
+
+  # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
+  label_enable_serial_numbers: "Habilitar números de serie en las tablas"
+  text_enable_serial_numbers_help: "Cuando está habilitado, las tablas mostrarán una columna de número de serie (Nº) que muestra el número de fila de cada registro."
+ 
+

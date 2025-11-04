@@ -1,5 +1,4 @@
 sv:
-  # my_label: "Min rubrik"
   label_id: ID
   label_custom_tables: Custom tables
   label_glad_custom_tables: Anpassade tabeller
@@ -30,3 +29,16 @@ sv:
   text_missing_permission_manage_custom_tables: Du har ej rättigheter att ändra anpassade tabeller!
   field_name: Namn
   field_created_on: Skapad
+  field_created_on: Skapad den
+
+  # NEW STRINGS:
+  label_custom_tables_settings: "Inställningar för anpassade tabeller"
+  label_enable_custom_permissions: "Aktivera anpassade gruppbehörigheter"
+  label_allowed_groups: "Grupper med full åtkomst"
+  text_enable_custom_permissions_help: "När aktiverat kommer endast valda grupper att ha full behörighet (redigera, ta bort). När det är inaktiverat har endast administratörer och chefer full åtkomst."
+  text_allowed_groups_help: "Välj användargrupper som ska ha full behörighet (redigera, ta bort tabeller och poster). Alla andra användare kan bara visa och lägga till poster."
+
+  # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
+  label_enable_serial_numbers: "Aktivera serienummer i tabeller"
+  text_enable_serial_numbers_help: "När aktiverat visar tabellerna en kolumn med serienummer (Nr) som visar radnumret för varje post."
+ 
