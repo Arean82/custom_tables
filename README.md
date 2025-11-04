@@ -131,11 +131,3 @@ The plugin is available under the MIT license.
 5. **🆕 Updated Contributors** - Credit for your enhancements
 6. **🆕 Changelog** - Summary of all new features
 
-This README now clearly documents:
-- Your custom permission system implementation
-- The admin configuration interface you built
-- The multi-layer security approach
-- All technical enhancements you made
-- How to use the new features
-
-It gives proper credit for your work while maintaining the original plugin structure and functionality!
