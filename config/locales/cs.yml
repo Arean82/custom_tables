@@ -1,1 +1,42 @@
 cs:
+  label_id: ID
+  label_custom_tables: Vlastní tabulky
+  label_glad_custom_tables: Vlastní tabulky
+  label_custom_table_new: Nová tabulka
+  label_custom_table: Vlastní tabulka
+  label_table: Tabulka
+  label_custom_table_edit: Upravit tabulku
+  glad_custom_tables: Vlastní tabulky
+  custom_tables: Vlastní tabulky
+  label_custom_entity_edit: Upravit %{name}
+  label_custom_entity_new: Nový %{name}
+  label_custom_table_tab: '%{name}'
+  button_edit_custom_table: Upravit tabulku
+  button_delete_custom_table: Smazat tabulku
+  label_custom_field_edit: Upravit vlastní pole
+  field_main_custom_field: Hlavní sloupec
+  label_belongs_to: Patří k
+  field_parent_table: Tabulka
+  label_bulk_edit_selected: Hromadně upravit vybrané %{table_name}
+  label_new_column: Nový sloupec
+  label_all_tables: Všechny tabulky
+  help_please_configure_table_first: V této tabulce nejsou žádná vlastní pole. %{settings}
+  label_add: Přidat
+  button_new_comment: Nový komentář
+  label_new_note: Nový komentář
+  field_external_name: Externí název
+  field_export: Exportovat
+  text_missing_permission_manage_custom_tables: Nemáte oprávnění spravovat vlastní tabulky!
+  field_name: Název
+  field_created_on: Vytvořeno
+
+  # NEW STRINGS:
+  label_custom_tables_settings: "Nastavení vlastních tabulek"
+  label_enable_custom_permissions: "Povolit vlastní oprávnění skupin"
+  label_allowed_groups: "Skupiny s plným přístupem"
+  text_enable_custom_permissions_help: "Když je povoleno, pouze vybrané skupiny budou mít plná oprávnění (úpravy, mazání). Když je zakázáno, plný přístup mají pouze administrátoři a manažeři."
+  text_allowed_groups_help: "Vyberte uživatelské skupiny, které by měly mít plný přístup (úpravy, mazání tabulek a záznamů). Ostatní uživatelé budou moci pouze zobrazovat a přidávat záznamy."
+
+  # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
+  label_enable_serial_numbers: "Povolit sériová čísla v tabulkách"
+  text_enable_serial_numbers_help: "Když je povoleno, tabulky zobrazí sloupec sériového čísla (S. č.) s pořadovým číslem každého záznamu."

@@ -1,6 +1,4 @@
-# Spanish strings go here for Rails i18n
 es:
-  # my_label: "My label"
   label_id: ID
   label_custom_tables: Tablas personalizadas
   label_glad_custom_tables: Tablas personalizadas
@@ -8,10 +6,10 @@ es:
   label_custom_table: Tabla personalizada
   label_table: Tabla
   label_custom_table_edit: Editar tabla
-  glad_custom_tables: Tabla personalizada
-  custom_tables: Tabla personalizada
+  glad_custom_tables: Tablas personalizadas
+  custom_tables: Tablas personalizadas
   label_custom_entity_edit: Editar %{name}
-  label_custom_entity_new: Nueva %{name}
+  label_custom_entity_new: Nuevo %{name}
   label_custom_table_tab: '%{name}'
   button_edit_custom_table: Editar tabla
   button_delete_custom_table: Eliminar tabla
@@ -19,7 +17,7 @@ es:
   field_main_custom_field: Columna principal
   label_belongs_to: Pertenece a
   field_parent_table: Tabla
-  label_bulk_edit_selected: Edición masiva seleccionada %{table_name}
+  label_bulk_edit_selected: Edición masiva de %{table_name} seleccionadas
   label_new_column: Nueva columna
   label_all_tables: Todas las tablas
   help_please_configure_table_first: No hay campos personalizados en esta tabla. %{settings}
@@ -28,6 +26,17 @@ es:
   label_new_note: Nuevo comentario
   field_external_name: Nombre externo
   field_export: Exportar
-  text_missing_permission_manage_custom_tables: ¡Sin permiso para administrar tablas personalizadas!
+  text_missing_permission_manage_custom_tables: ¡Sin permiso para gestionar tablas personalizadas!
   field_name: Nombre
   field_created_on: Creado el
+
+  # NEW STRINGS:
+  label_custom_tables_settings: "Configuración de tablas personalizadas"
+  label_enable_custom_permissions: "Habilitar permisos personalizados de grupo"
+  label_allowed_groups: "Grupos con acceso completo"
+  text_enable_custom_permissions_help: "Cuando está habilitado, solo los grupos seleccionados tendrán permisos completos (editar, eliminar). Cuando está deshabilitado, solo los administradores y gerentes tendrán acceso completo."
+  text_allowed_groups_help: "Seleccione los grupos de usuarios que deben tener acceso completo (editar, eliminar tablas y registros). Todos los demás usuarios solo podrán ver y añadir registros."
+
+  # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
+  label_enable_serial_numbers: "Habilitar números de serie en las tablas"
+  text_enable_serial_numbers_help: "Cuando está habilitado, las tablas mostrarán una columna de número de serie (Nº) que muestra el número de fila de cada registro."
