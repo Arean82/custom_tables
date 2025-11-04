@@ -14,6 +14,11 @@
             <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
                               :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
           </th>
+          <!-- ADD S.NO COLUMN HEADER -->
+          <% if custom_tables_serial_numbers_enabled? %>
+            <th class="sno">S.No</th>
+          <% end %>
+
           <% query.inline_columns.each do |column| %>
               <%= column_header(query, column) %>
           <% end %>
@@ -41,10 +46,19 @@
             <tr class="cusotm-entity-<%= cycle("odd", "even") %> hascontextmenu">
               <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entity.id, false, id: nil) %></td>
               <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, entity)}</td>"}.join %>
+              <!-- ADD S.NO CELL -->
+              <% if custom_tables_serial_numbers_enabled? %>
+                <td class="sno"><%= @entity_count ? (@entity_pages.offset + (entity_counter || 0) + 1) : (entity_counter || 0) + 1 %></td>
+              <% end %>
+              <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, entity)}</td>"}.join %>
+
               <td class="buttons">
                     <%= link_to sprite_icon('bullet-go', l(:label_open_issues)), custom_entity_path(entity), title: l(:label_open_issues), class: Redmine::VERSION::MAJOR > 5 ? 'icon-only' : 'icon-only icon-arrow-right' %>
                     <%= link_to sprite_icon('edit', l(:button_edit)), edit_custom_entity_path(entity, edit_query: true, back_url: back_url), remote: true, title: l(:button_edit), class: 'icon-only icon-edit' %>
+                    <!-->
                     <% if User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) } %>
+                    -->
+                    <% if custom_tables_user_has_full_access? %>
                       <%= link_to sprite_icon('del', l(:button_delete)), custom_entity_path(entity, custom_table_id: @custom_table, project_id: params[:project_id], back_url: back_url), data: {confirm: l(:text_are_you_sure)}, method: :delete, title: l(:button_delete), class: 'icon-only icon-del' %>
                     <% end %>
               </td>

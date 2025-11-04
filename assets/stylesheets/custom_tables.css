@@ -1,0 +1,13 @@
+/* plugins/custom_tables/assets/stylesheets/custom_tables.css */
+table.list th.sno, 
+table.list td.sno {
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #f9f9f9;
+  border-right: 1px solid #e0e0e0;
+}
+
+table.list th.sno {
+  background-color: #f0f0f0;
+}

@@ -20,6 +20,8 @@ Redmine::Plugin.register :custom_tables do
     custom_entities: [:show],
   }, global: true
 
+stylesheet 'custom_tables'
+
   Redmine::FieldFormat::UserFormat.customized_class_names << 'CustomEntity'
 end
 
