@@ -40,5 +40,9 @@ cs:
   # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
   label_enable_serial_numbers: "Povolit sériová čísla v tabulkách"
   text_enable_serial_numbers_help: "Když je povoleno, tabulky zobrazí sloupec sériového čísla (S. č.) s pořadovým číslem každého záznamu."
+<<<<<<< Updated upstream
  
 
+=======
+ 
+>>>>>>> Stashed changes

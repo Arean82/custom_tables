@@ -41,5 +41,9 @@ en:
   # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
   label_enable_serial_numbers: "Enable Serial Numbers in Tables"
   text_enable_serial_numbers_help: "When enabled, tables will display a serial number (S.No) column showing the row number for each record"
+<<<<<<< Updated upstream
  
 
+=======
+ 
+>>>>>>> Stashed changes
