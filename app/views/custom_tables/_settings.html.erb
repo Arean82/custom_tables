@@ -17,4 +17,21 @@
     <br />
     <em class="info"><%= l(:text_allowed_groups_help) %></em>
   </p>
+
+    <!-- ADD S.NO CONFIGURATION -->
+  <p>
+    <%= content_tag :label, l(:label_enable_serial_numbers) %>
+    <%= check_box_tag 'settings[enable_serial_numbers]', 1, @settings['enable_serial_numbers'] %>
+    <br />
+    <em class="info"><%= l(:text_enable_serial_numbers_help) %></em>
+  </p>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const select = document.querySelector('.custom-tables-select');
+    if (select) {
+      select.style.minHeight = '150px';
+    }
+  });
+  </script>
 </div>

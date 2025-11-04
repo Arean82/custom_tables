@@ -20,4 +20,10 @@ module CustomTablesPermissionHelper
     
     user.groups.any? { |group| allowed_group_ids.include?(group.id.to_s) }
   end
+
+  # ADD SERIAL NUMBER HELPER METHOD
+  def custom_tables_serial_numbers_enabled?
+    settings = Setting.plugin_custom_tables || {}
+    settings['enable_serial_numbers'] || false
+  end
 end
