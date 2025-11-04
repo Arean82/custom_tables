@@ -1,5 +1,3 @@
-#custom_entities_controller.rb
-
 class CustomEntitiesController < ApplicationController
   layout 'admin'
   self.main_menu = false
@@ -57,19 +55,18 @@ class CustomEntitiesController < ApplicationController
   end
 
   def new_note
-
     respond_to do |format|
       format.js
       format.html
     end
   end
 
+  # ADD SERIAL NUMBER HELPER
   def custom_tables_serial_numbers_enabled?
     settings = Setting.plugin_custom_tables || {}
     settings['enable_serial_numbers'] || false
   end
   helper_method :custom_tables_serial_numbers_enabled?
-
 
   def destroy
     Rails.logger.info "✅ ALLOWED: #{User.current.login} deleting CustomEntities: #{@custom_entities.map(&:id).join(', ')}"
@@ -94,6 +91,7 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
+  # KEEP ONLY ONE CONTEXT_MENU METHOD - REMOVE THE DUPLICATE
   def context_menu
     if (@custom_entities.size == 1)
       @custom_entity = @custom_entities.first
@@ -101,7 +99,7 @@ class CustomEntitiesController < ApplicationController
     @custom_entity_ids = @custom_entities.map(&:id).sort
 
     can_edit = @custom_entities.detect{|c| !c.editable?}.nil?
-    # Use the module method directly
+    # Use the permission helper consistently
     can_delete = custom_tables_user_has_full_access?
     @can = {:edit => can_edit, :delete => can_delete}
     @back = back_url
@@ -111,15 +109,12 @@ class CustomEntitiesController < ApplicationController
     render :layout => false
   end
 
-  
   def create
     @custom_entity = CustomEntity.new(author: User.current, custom_table_id: params[:custom_entity][:custom_table_id])
     @custom_entity.safe_attributes = params[:custom_entity]
 
-    
     @custom_entity.updated_by = User.current  # track updater
     @custom_entity.updated_at = Time.current  # ensure timestamp if not automatically handled
-
 
     if @custom_entity.save
       flash[:notice] = l(:notice_successful_create)
@@ -166,7 +161,7 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
-  
+  # KEEP ONLY ONE PERMISSION METHOD
   def custom_tables_user_has_full_access?(user = User.current)
     settings = Setting.plugin_custom_tables || {}
     
@@ -185,6 +180,7 @@ class CustomEntitiesController < ApplicationController
     
     user.groups.any? { |group| allowed_group_ids.include?(group.id.to_s) }
   end
+  helper_method :custom_tables_user_has_full_access?
 
   def add_belongs_to
     @custom_field = CustomEntityCustomField.find(params[:custom_field_id])
@@ -195,21 +191,22 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
-  def context_menu
-    if (@custom_entities.size == 1)
-      @custom_entity = @custom_entities.first
-    end
-    @custom_entity_ids = @custom_entities.map(&:id).sort
-
-    can_edit = @custom_entities.detect{|c| !c.editable?}.nil?
-    can_delete = User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) }
-    @can = {:edit => can_edit, :delete => can_delete}
-    @back = back_url
-
-    @safe_attributes = @custom_entities.map(&:safe_attribute_names).reduce(:&)
-
-    render :layout => false
-  end
+  # REMOVE THIS DUPLICATE CONTEXT_MENU METHOD
+  # def context_menu
+  #   if (@custom_entities.size == 1)
+  #     @custom_entity = @custom_entities.first
+  #   end
+  #   @custom_entity_ids = @custom_entities.map(&:id).sort
+  #
+  #   can_edit = @custom_entities.detect{|c| !c.editable?}.nil?
+  #   can_delete = User.current.admin? || User.current.roles.any? { |r| ['Administrator', 'Manager'].include?(r.name) }
+  #   @can = {:edit => can_edit, :delete => can_delete}
+  #   @back = back_url
+  #
+  #   @safe_attributes = @custom_entities.map(&:safe_attribute_names).reduce(:&)
+  #
+  #   render :layout => false
+  # end
 
   def bulk_edit
     @custom_fields = @custom_entities.map { |c| c.available_custom_fields }.reduce(:&).uniq
@@ -269,5 +266,4 @@ class CustomEntitiesController < ApplicationController
   def find_custom_entities
     @custom_entities = CustomEntity.where(id: (params[:id] || params[:ids]))
   end
-
 end
