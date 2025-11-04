@@ -14,8 +14,8 @@ This plugin provides a possibility to create custom tables. The table is built w
 - **Admin Settings Interface** - Easy configuration via plugin settings page
 - **Enhanced Security** - Controller-level and view-level permission checks
 
-<img src="images/custom_table_configure.png" width="800"/>
-<img src="images/custom_table_permission.png" width="800"/>
+<img src="Images/custom_table_configure.png" width="800"/>
+<img src="Images/custom_table_permission.png" width="800"/>
 
 Features
 -------------
@@ -120,7 +120,7 @@ The plugin is available under the MIT license.
 - ✅ Enhanced UI with conditional button visibility
 - ✅ Persistent settings configuration
 - ✅ Backward compatibility with existing installations
-```
+
 
 ## Key Highlights of Your Modifications:
 
