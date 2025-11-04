@@ -9,7 +9,9 @@ Redmine::Plugin.register :custom_tables do
   author_url 'https://github.com/Arean82/'
 
   # Add settings configuration
-  settings default: { 'allowed_groups' => [], 'enable_custom_permissions' => false },
+  settings default: { 'allowed_groups' => [],
+                      'enable_custom_permissions' => false,
+                      'enable_serial_numbers' => false },
            partial: 'custom_tables/settings'
 
   permission :manage_custom_tables, {
