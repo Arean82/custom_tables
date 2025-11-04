@@ -16,7 +16,7 @@
           </th>
           <!-- ADD S.NO COLUMN HEADER -->
           <% if custom_tables_serial_numbers_enabled? %>
-            <th class="sno">S.No</th>
+              <th class="sno" style="width: 60px; text-align: center; font-weight: bold; background-color: #f0f0f0; border-right: 1px solid #e0e0e0;">S.No</th>
           <% end %>
 
           <% query.inline_columns.each do |column| %>
@@ -48,7 +48,8 @@
               <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, entity)}</td>"}.join %>
               <!-- ADD S.NO CELL -->
               <% if custom_tables_serial_numbers_enabled? %>
-                <td class="sno"><%= @entity_count ? (@entity_pages.offset + (entity_counter || 0) + 1) : (entity_counter || 0) + 1 %></td>
+                <!--<td class="sno"><%= @entity_count ? (@entity_pages.offset + (entity_counter || 0) + 1) : (entity_counter || 0) + 1 %></td>-->
+                <td class="sno" style="width: 60px; text-align: center; font-weight: bold; background-color: #f9f9f9; border-right: 1px solid #e0e0e0;"> <%= @entity_count ? (@entity_pages.offset + (entity_counter || 0) + 1) : (entity_counter || 0) + 1 %>
               <% end %>
               <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, entity)}</td>"}.join %>
 
