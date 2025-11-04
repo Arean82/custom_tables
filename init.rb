@@ -4,7 +4,7 @@ Redmine::Plugin.register :custom_tables do
   author 'Arean Narrayan'
   description 'This is a plugin for Redmine'
   version '1.1.2'
-  requires_redmine :version_or_higher => '3.4.0'
+  requires_redmine :version_or_higher => '5.0.0'
   url 'https://github.com/Arean82/custom_tables'
   author_url 'https://github.com/Arean82/'
 
