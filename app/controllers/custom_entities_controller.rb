@@ -15,9 +15,12 @@ class CustomEntitiesController < ApplicationController
   helper :sort
   include SortHelper
   helper :custom_tables_pdf
+  # Add permission helper
+  helper :custom_tables_permission
 
   accept_api_auth :show, :create, :update, :destroy
 
+  # Use the permission method
   before_action :check_destroy_permission, only: [:destroy, :context_menu, :bulk_update]
 
   before_action :authorize_global
@@ -77,8 +80,7 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
-
-
+  # Use the module method directly
   def check_destroy_permission
     unless custom_tables_user_has_full_access?
       Rails.logger.warn "🚫 DESTROY BLOCKED: #{User.current.login}, needs full access"
@@ -93,7 +95,7 @@ class CustomEntitiesController < ApplicationController
     @custom_entity_ids = @custom_entities.map(&:id).sort
 
     can_edit = @custom_entities.detect{|c| !c.editable?}.nil?
-    # Use the new permission helper
+    # Use the module method directly
     can_delete = custom_tables_user_has_full_access?
     @can = {:edit => can_edit, :delete => can_delete}
     @back = back_url
@@ -158,18 +160,25 @@ class CustomEntitiesController < ApplicationController
     end
   end
 
-  #def destroy
-  #  custom_table = @custom_entities.first.custom_table
-  #  @custom_entities.destroy_all
-#
-  #  respond_to do |format|
-  #    format.html {
-  #      flash[:notice] = l(:notice_successful_delete)
-  #      redirect_back_or_default custom_table_path(custom_table)
-  #    }
-  #    format.api { render_api_ok }
-  #  end
-  #end
+  
+  def custom_tables_user_has_full_access?(user = User.current)
+    settings = Setting.plugin_custom_tables || {}
+    
+    # If custom permissions are disabled, use your existing role-based logic
+    unless settings['enable_custom_permissions']
+      allowed_roles = ['Administrator', 'Manager']
+      user_roles = user.roles.map(&:name)
+      return user.admin? || user_roles.any? { |r| allowed_roles.include?(r) }
+    end
+    
+    # Custom permission logic
+    return true if user.admin?
+    
+    allowed_group_ids = settings['allowed_groups'] || []
+    return false if allowed_group_ids.empty?
+    
+    user.groups.any? { |group| allowed_group_ids.include?(group.id.to_s) }
+  end
 
   def add_belongs_to
     @custom_field = CustomEntityCustomField.find(params[:custom_field_id])

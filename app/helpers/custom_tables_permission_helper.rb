@@ -1,7 +1,9 @@
 # app/helpers/custom_tables_permission_helper.rb
 module CustomTablesPermissionHelper
+  #include CustomTables::PermissionModule
+  
   def custom_tables_user_has_full_access?(user = User.current)
-    settings = Setting.plugin_custom_tables
+    settings = Setting.plugin_custom_tables || {}  # Added || {} for safety
     
     # If custom permissions are disabled, use your existing role-based logic
     unless settings['enable_custom_permissions']

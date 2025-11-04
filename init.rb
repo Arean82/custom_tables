@@ -34,6 +34,15 @@ require File.expand_path('../lib/custom_tables/custom_entities_controller_patch'
 
 Rails.configuration.to_prepare do
   require_dependency 'custom_entities_controller'
+  require_dependency 'custom_tables_controller'
+  require_dependency 'table_fields_controller'
+  
+  # Include the permission module in all controllers
+  [CustomEntitiesController, CustomTablesController, TableFieldsController].each do |controller|
+    controller.include(CustomTables::PermissionModule) unless controller.include?(CustomTables::PermissionModule)
+  end
+  
+  # Also include in the existing patch
   CustomEntitiesController.include(CustomTables::CustomEntitiesControllerPatch)
 end
 

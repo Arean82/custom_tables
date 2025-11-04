@@ -31,3 +31,10 @@ en:
   text_missing_permission_manage_custom_tables: No permission to manage custom tables!
   field_name: Name
   field_created_on: Created on
+
+  label_custom_tables_settings: "Custom Tables Settings"
+  label_enable_custom_permissions: "Enable Custom Group Permissions"
+  label_allowed_groups: "Groups with Full Access"
+  text_enable_custom_permissions_help: "When enabled, only selected groups will have full permissions (edit, delete). When disabled, only Administrators and Managers have full access."
+  text_allowed_groups_help: "Select user groups that should have full permissions (edit, delete tables and entities). All other users will only be able to view and add records."
+
