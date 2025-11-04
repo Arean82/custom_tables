@@ -1,6 +1,4 @@
-Here's the updated README with your modifications highlighted:
 
-```markdown
 Redmine Custom Tables
 ==================
 
