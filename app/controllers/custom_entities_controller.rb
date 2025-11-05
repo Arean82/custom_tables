@@ -18,7 +18,8 @@ class CustomEntitiesController < ApplicationController
   # Add permission helper
   helper :custom_tables_permission
 
-  accept_api_auth :show, :create, :update, :destroy
+  #accept_api_auth :show, :create, :update, :destroy
+  accept_api_auth :index, :show, :create, :update, :destroy
 
   # Use the permission method
   before_action :check_destroy_permission, only: [:destroy, :context_menu, :bulk_update]
