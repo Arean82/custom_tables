@@ -41,9 +41,8 @@ en:
   # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
   label_enable_serial_numbers: "Enable Serial Numbers in Tables"
   text_enable_serial_numbers_help: "When enabled, tables will display a serial number (S.No) column showing the row number for each record"
-<<<<<<< Updated upstream
- 
 
-=======
- 
->>>>>>> Stashed changes
+  #Download all tables as CSV
+  label_export_all_tables: "Export All Custom Tables"
+  title_export_all_tables: "Export all custom tables data from this project to CSV"
+

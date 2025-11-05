@@ -42,9 +42,4 @@ es:
   # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
   label_enable_serial_numbers: "Habilitar números de serie en las tablas"
   text_enable_serial_numbers_help: "Cuando está habilitado, las tablas mostrarán una columna de número de serie (Nº) que muestra el número de fila de cada registro."
-<<<<<<< Updated upstream
- 
 
-=======
- 
->>>>>>> Stashed changes

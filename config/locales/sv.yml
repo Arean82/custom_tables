@@ -41,8 +41,4 @@ sv:
   # NEW STRINGS FOR SERIAL NUMBERS FEATURE:
   label_enable_serial_numbers: "Aktivera serienummer i tabeller"
   text_enable_serial_numbers_help: "När aktiverat visar tabellerna en kolumn med serienummer (Nr) som visar radnumret för varje post."
-<<<<<<< Updated upstream
- 
-=======
- 
->>>>>>> Stashed changes
+
