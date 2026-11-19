@@ -3,7 +3,6 @@ module CustomTables
     module ProjectPatch
       def self.included(base)
         base.class_eval do
-
           has_and_belongs_to_many :custom_tables
 
           # Returns a scope of all custom tables enabled for project issues
@@ -16,11 +15,8 @@ module CustomTables
                 where("custom_tables.is_for_all = ? OR custom_tables.id IN (?)", true, custom_table_ids).
                 where(trackers: {id: issue.tracker})
           end
-
         end
       end
     end
   end
 end
-
-Project.send(:include, CustomTables::Patches::ProjectPatch)

@@ -9,5 +9,3 @@ module CustomTables
     end
   end
 end
-
-CustomFieldValue.send(:include, CustomTables::Patches::CustomFieldValuePatch)

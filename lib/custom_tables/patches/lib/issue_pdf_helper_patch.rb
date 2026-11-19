@@ -52,5 +52,3 @@ module CustomTables
     end
   end
 end
-
-Redmine::Export::PDF::IssuesPdfHelper.send(:include, CustomTables::Patches::Lib::IssuePdfHelperPatch)

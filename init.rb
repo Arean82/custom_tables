@@ -1,9 +1,9 @@
 # init.rb
 Redmine::Plugin.register :custom_tables do
-  name 'Custom Tables plugin'
+  name 'Custom Tables plugin v2'
   author 'Arean Narrayan'
-  description 'This is a plugin for Redmine'
-  version '1.1.2'
+  description 'Custom Tables and Entities plugin for Redmine'
+  version '2.0.0'
   requires_redmine :version_or_higher => '5.0.0'
   url 'https://github.com/Arean82/custom_tables'
   author_url 'https://github.com/Arean82/'
@@ -20,7 +20,7 @@ Redmine::Plugin.register :custom_tables do
     custom_entities: [:show],
   }, global: true
 
-  Redmine::FieldFormat::UserFormat.customized_class_names << 'CustomEntity'
+  Redmine::FieldFormat::UserFormat.customized_class_names << 'CustomEntity' unless Redmine::FieldFormat::UserFormat.customized_class_names.include?('CustomEntity')
 end
 
 Redmine::MenuManager.map :admin_menu do |menu|
@@ -28,23 +28,31 @@ Redmine::MenuManager.map :admin_menu do |menu|
             :html => {:class => Redmine::VERSION::MAJOR > 5 ? 'icon' : 'icon icon-package'}
 end
 
-Dir[File.join(File.dirname(__FILE__), '/lib/custom_tables/**/*.rb')].each { |file| require_dependency file }
-
-require File.expand_path('../lib/custom_tables/custom_entities_controller_patch', __FILE__)
+require_relative 'lib/custom_tables/custom_entities_controller_patch'
+require_relative 'lib/custom_tables/permission_module'
+require_relative 'lib/custom_tables/record_restrict_patch'
+require_relative 'lib/custom_tables/acts_as_journalize'
+require_relative 'lib/custom_tables/hooks'
 
 Rails.configuration.to_prepare do
-  require_dependency 'custom_entities_controller'
-  require_dependency 'custom_tables_controller'
-  require_dependency 'table_fields_controller'
-  
-  # Include the permission module in all controllers
+  # Include patches into core Redmine models and helpers safely
+  Issue.send(:include, CustomTables::Patches::IssuePatch) unless Issue.included_modules.include?(CustomTables::Patches::IssuePatch)
+  Project.send(:include, CustomTables::Patches::ProjectPatch) unless Project.included_modules.include?(CustomTables::Patches::ProjectPatch)
+  CustomValue.send(:include, CustomTables::Patches::CustomValuePatch) unless CustomValue.included_modules.include?(CustomTables::Patches::CustomValuePatch)
+  CustomFieldValue.send(:include, CustomTables::Patches::CustomFieldValuePatch) unless CustomFieldValue.included_modules.include?(CustomTables::Patches::CustomFieldValuePatch)
+  ApplicationHelper.send(:include, CustomTables::Patches::ApplicationHelperPatch) unless ApplicationHelper.included_modules.include?(CustomTables::Patches::ApplicationHelperPatch)
+
+  if defined?(Redmine::Export::PDF::IssuesPdfHelper)
+    Redmine::Export::PDF::IssuesPdfHelper.send(:include, CustomTables::Patches::Lib::IssuePdfHelperPatch) unless Redmine::Export::PDF::IssuesPdfHelper.included_modules.include?(CustomTables::Patches::Lib::IssuePdfHelperPatch)
+  end
+
+  Redmine::FieldFormat::UserFormat.send(:prepend, CustomTables::Patches::UserFormatPatch) unless Redmine::FieldFormat::UserFormat.ancestors.include?(CustomTables::Patches::UserFormatPatch)
+
+  # Include the permission module in custom tables controllers
   [CustomEntitiesController, CustomTablesController, TableFieldsController].each do |controller|
     controller.include(CustomTables::PermissionModule) unless controller.include?(CustomTables::PermissionModule)
   end
-  
-  # Also include in the existing patch
-  CustomEntitiesController.include(CustomTables::CustomEntitiesControllerPatch)
-end
 
-#require File.expand_path('../lib/custom_tables/patches/followups_loader_patch', __FILE__)
-require_dependency File.expand_path('lib/custom_tables/patches/followups_loader_patch', __dir__)
+  # Controller permissions patch
+  CustomEntitiesController.include(CustomTables::CustomEntitiesControllerPatch) unless CustomEntitiesController.included_modules.include?(CustomTables::CustomEntitiesControllerPatch)
+end

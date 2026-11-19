@@ -1,5 +1,6 @@
-*.DS_Store
-.eslintcache
-.rvmrc
-.project
-.idea
+Gemfile.lock
+.bundle/
+*.old
+*.swp
+*~
+.DS_Store

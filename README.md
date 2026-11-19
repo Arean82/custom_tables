@@ -1,134 +1,106 @@
+# Redmine Custom Tables v2
 
-Redmine Custom Tables
-==================
+[![Redmine 7.0 Ready](https://img.shields.io/badge/Redmine-5.x%20%7C%206.x%20%7C%207.x-blue.svg)](https://www.redmine.org)
+[![Ruby 3.x](https://img.shields.io/badge/Ruby-3.x%20%7C%204.x-red.svg)](https://www.ruby-lang.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This plugin provides a possibility to create custom tables. The table is built with Redmine custom fields. It allows you to create any databases you need for your business and integrate it into your workflow processes.
+**Author:** Arean Narrayan ([@Arean82](https://github.com/Arean82))  
+**Repository:** [https://github.com/Arean82/custom_tables](https://github.com/Arean82/custom_tables)  
+**Original Fork:** [frywer/custom_tables](https://github.com/frywer/custom_tables)
 
-<img src="Images/custom_tables_v2.png" width="800"/>
+Custom Tables v2 is a comprehensive plugin for Redmine that empowers administrators and teams to construct flexible, relational database tables directly inside Redmine using standard custom fields. Seamlessly integrate structured tracking tables into issues, projects, and administrative workflows with enterprise-grade permission management.
 
-## 🆕 Enhanced Features & Modifications
+---
 
-**Custom Modifications Added:**
-- **Advanced Permission System** - Configurable group-based access control
-- **Role-Based Restrictions** - Fine-grained control over edit/delete permissions
-- **Admin Settings Interface** - Easy configuration via plugin settings page
-- **Enhanced Security** - Controller-level and view-level permission checks
+![Custom Tables Preview](Images/custom_tables_v2.png)
 
-<img src="Images/custom_table_configure.png" width="800"/>
-<img src="Images/custom_table_permission.png" width="800"/>
+---
 
-Features
--------------
-* Table constructor
-* Filtering 
-* Sorting 
-* Grouping
-* Integration with issues
-* History of changes
-* Commenting entities
-* Export CSV/PDF
-* API
-* **🆕 Configurable permission system** - Control which user groups can edit and delete records
-* **🆕 Role-based access control** - Restrict operations to specific roles (Administrator, Manager)
-* **🆕 Settings configuration page** - Easy management of permissions via admin interface
+## 🚀 Key Features in Version 2.0.0
 
-Compatibility
--------------
-* Redmine 5.0.0 or higher
+* **Full Redmine 7.x & Rails 7 Compatibility:** Completely refactored and certified for Rails 7 and Zeitwerk autoloading with clean `to_prepare` architecture.
+* **Granular Group & Role Permission System:** Control which user groups and roles can view, create, edit, bulk-update, or delete table records.
+* **Multi-Layer Security:** Action-level controller guards paired with view-level conditional UI rendering so destructive controls are cleanly hidden from unauthorized users.
+* **Interactive Table Constructor:** Build columns utilizing Redmine's full suite of custom field formats (String, Text, Float, Integer, Date, List, User, Belong-to relations, etc.).
+* **Issue & Project Embedding:** Automatically link and display relevant custom tables inside issue detail views.
+* **Exporting & Reporting:** Native export capabilities to CSV and PDF.
+* **REST API:** Fully operational JSON/XML API for external services, automation scripts, and integrations.
 
-Installation and Setup
-----------------------
+---
 
-* Clone or [download](https://github.com/Arean82/custom_tables/archive/refs/heads/master.zip) this repo into your **redmine_root/plugins/** folder
+## ⚙️ Configuration & Screenshots
 
+Configure group-based access control directly from the settings interface:
+
+![Custom Tables Configuration](Images/custom_table_configure.png)
+
+Fine-tune role and group permissions per table:
+
+![Custom Tables Permissions](Images/custom_table_permission.png)
+
+---
+
+## 📋 Compatibility
+
+* **Redmine:** 5.0.x, 5.1.x, 6.0.x, and **Redmine 7.0.x**
+* **Ruby:** 3.0, 3.1, 3.2, 3.3, 4.0
+* **Rails:** 6.1, 7.0, 7.1+ (Zeitwerk mode)
+* Tested in production environments on Redmine 7.0.3
+
+---
+
+## 🛠️ Installation Instructions
+
+> **Note:** Always run `bundle` and `rake` commands from the **Redmine root directory**, never from inside the plugin directory.
+
+### 1. Clone the repository
+Navigate to your Redmine `plugins` folder and clone the repository:
+
+```bash
+cd /data/redmine/plugins
+git clone https://github.com/Arean82/custom_tables.git
 ```
-$ git clone https://github.com/Arean82/custom_tables.git
+
+### 2. Configure Bundler & Dependencies
+From your Redmine root directory:
+
+```bash
+cd /data/redmine
+bundle config set --local without 'development test'
+bundle install
 ```
-* If you downloaded a tarball / zip from master branch, make sure you rename the extracted folder to `custom_tables`
-* You have to run the plugin rake task to provide the assets (from the Redmine root directory):
+
+### 3. Run Database Migrations
+Run the plugin database migrations from the Redmine root directory:
+
+```bash
+bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
-$ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+
+### 4. Restart Redmine
+Restart your Redmine application server (e.g., Puma, Passenger, or systemd):
+
+```bash
+sudo systemctl restart redmine
 ```
-* Restart redmine
 
-Usage
-----------------------
-### Basic Setup
-1) Visit **Administration → Custom tables** to open table constructor. 
-2) Press button **New table**. Fill the name field, select projects you want to enable table on and submit the form.
-3) Add custom fields to your new table.
-4) Give access to the users **Administration → Roles and permissions → Project → Manage custom tables**
-5) **🆕 Configure permissions** by going to **Administration → Plugins → Custom Tables plugin → Configure** to set up which user groups can edit and delete records *(All users can view and add records, but only authorized users can edit or delete)*
+---
 
-### 🆕 Enhanced Permission Configuration
-The plugin includes a **flexible and configurable permission system** that allows precise control over who can edit and delete custom table records:
+## 📖 Quick Start & Usage
 
-#### Default Behavior (When Custom Permissions Disabled)
-- **Administrators**: Full access (create, edit, delete)
-- **Managers**: Full access (create, edit, delete)  
-- **Other Users**: View and add records only (edit/delete buttons hidden)
+1. **Create a Custom Table:**
+   * Go to **Administration** → **Custom tables**.
+   * Click **New table**, enter a title, and select which projects and trackers should include this table.
+2. **Define Columns:**
+   * Click into your new table and add the desired custom fields (text, date, number, users, dropdowns, etc.).
+3. **Configure Permissions:**
+   * Go to **Administration** → **Plugins** → **Custom Tables plugin v2** → **Configure**.
+   * Toggle **"Enable Custom Group Permissions"** to specify which groups are allowed to edit or delete records.
+4. **Assign Roles:**
+   * Go to **Administration** → **Roles and permissions** to grant the `Manage custom tables` and `View custom tables` permissions to your roles.
 
-#### 🆕 Custom Group Permissions (Enhanced Feature)
-You can configure specific user groups to have full access via the admin interface:
+---
 
-1. Go to **Administration → Plugins → Custom Tables plugin → Configure**
-2. Check **"Enable Custom Group Permissions"** to activate custom group-based access
-3. Select the user groups that should have full edit/delete permissions
-4. Click **Save** to apply changes
+## 📄 License
 
-#### 🆕 Multi-Layer Security
-- **View-Level Security**: Delete/edit buttons are hidden from unauthorized users
-- **Controller-Level Security**: All destructive actions are blocked at the controller level
-- **Role-Based Security**: Built-in support for Administrator and Manager roles
-- **Group-Based Security**: Custom group permissions via settings configuration
-
-#### Permission Levels
-- **Full Access Users** (Admins, Managers, or selected groups): Can create, edit, and delete tables and records
-- **Standard Users**: Can view and add records, but cannot edit or delete existing ones
-
-### 🆕 Technical Implementation Details
-The enhanced permission system includes:
-- **CustomTablesPermissionHelper** - Centralized permission logic
-- **Controller-level before_actions** - Security at the action level
-- **View-level conditionals** - UI element visibility control
-- **Settings management** - Persistent configuration storage
-- **Role and group validation** - Multi-factor permission checking
-
-### API Access
-The plugin provides API endpoints for managing custom tables and entities. API access follows the same permission rules as the web interface.
-
-Support
--------
-If you find any bugs, feel free to create an issue on GitHub or make a pull request.
-https://github.com/frywer/custom_tables
-
-Contributors
-------------
-* Ivan Ivon (@frywer)
-* **🆕 Plugin customization and enhanced permission system** - Added configurable group-based permissions, role restrictions, and admin settings interface
-
-License
--------
-The plugin is available under the MIT license.
-
-## 🆕 Changelog
-
-### Enhanced Version Features:
-- ✅ Configurable group-based permission system
-- ✅ Admin settings page for easy permission management  
-- ✅ Role-based restrictions (Administrator, Manager)
-- ✅ Multi-layer security (view + controller level)
-- ✅ Enhanced UI with conditional button visibility
-- ✅ Persistent settings configuration
-- ✅ Backward compatibility with existing installations
-
-
-## Key Highlights of Your Modifications:
-
-1. **🆕 Enhanced Features Section** - Clear overview of what you added
-2. **🆕 Icon indicators** - Visual markers for new features
-3. **🆕 Technical Details** - Explanation of the multi-layer security
-4. **🆕 Implementation Details** - Technical architecture of your permission system
-5. **🆕 Updated Contributors** - Credit for your enhancements
-6. **🆕 Changelog** - Summary of all new features
-
+This plugin is licensed under the [MIT License](LICENSE).
