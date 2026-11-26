@@ -25,7 +25,8 @@ end
 
 Redmine::MenuManager.map :admin_menu do |menu|
   menu.push :custom_tables, :custom_tables_path, caption: :label_custom_tables,
-            :html => {:class => Redmine::VERSION::MAJOR > 5 ? 'icon' : 'icon icon-package'}
+            :html => {:class => 'icon icon-table-multiple'},
+            :icon => 'table-multiple'
 end
 
 require_relative 'lib/custom_tables/custom_entities_controller_patch'
@@ -33,6 +34,11 @@ require_relative 'lib/custom_tables/permission_module'
 require_relative 'lib/custom_tables/record_restrict_patch'
 require_relative 'lib/custom_tables/acts_as_journalize'
 require_relative 'lib/custom_tables/hooks'
+require_relative 'lib/custom_tables/patches/issue_patch'
+require_relative 'lib/custom_tables/patches/project_patch'
+require_relative 'lib/custom_tables/patches/custom_value_patch'
+require_relative 'lib/custom_tables/patches/custom_field_value_patch'
+require_relative 'lib/custom_tables/patches/application_helper_patch'
 
 Rails.configuration.to_prepare do
   # Include patches into core Redmine models and helpers safely
